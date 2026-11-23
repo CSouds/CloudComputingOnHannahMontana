@@ -1,0 +1,26 @@
+services:
+  # Give backend developers the same local PostgreSQL setup without a native install.
+  postgres:
+    image: postgres:18
+    environment:
+      # These defaults are for local development only.
+      POSTGRES_DB: ${POSTGRES_DB:-filetransfer}
+      POSTGRES_USER: ${POSTGRES_USER:-filetransfer}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-development-only}
+    ports:
+      # Use a separate local port so native PostgreSQL can keep using 5432.
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      # Preserve registrations when the PostgreSQL container is recreated.
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      # Report readiness once PostgreSQL accepts connections to the application database.
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+# Keep database files outside the repository and independent of container lifetime.
+volumes:
+  postgres_data:
