@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/agent"
+    "cmake.sourceDirectory": "${workspaceFolder}/agent",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
