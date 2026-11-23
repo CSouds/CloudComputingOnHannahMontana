@@ -1,0 +1,199 @@
+/* Three columns: this device, the wires, and the stacked peers. */
+.device-graph {
+  display: grid;
+  /* The wire column keeps enough width for its branches to bend smoothly. */
+  grid-template-columns: minmax(200px, 1fr) minmax(160px, 1fr) minmax(280px, 1.4fr);
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.device-graph-current {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.device-graph-wires {
+  grid-column: 2;
+  grid-row: 1;
+  /* Below the cards, so the dots at each end sit on top of the wire rather than under it. */
+  position: relative;
+  z-index: 0;
+}
+
+/* Both layers fill the wire column in real pixels; paths come from deviceGraph.logic.ts. */
+.device-graph-wires svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.device-graph-peers {
+  grid-column: 3;
+  grid-row: 1;
+  /* Equal-height rows without gaps keep each row's center where the curve math expects it. */
+  display: grid;
+  grid-auto-rows: 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.device-graph-peers li {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.device-graph-empty {
+  grid-column: 2 / -1;
+  grid-row: 1;
+  align-self: center;
+  padding-left: 32px;
+  color: var(--app-text-muted);
+}
+
+/* Offline wire: a light grey line. Butt caps end exactly under the dots instead of poking past them. */
+.wire {
+  fill: none;
+  stroke: var(--graph-wire);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+/* Online wire: solid blue with only a faint glow. The glow is a CSS filter on the whole layer,
+   so it applies evenly along the whole wire. */
+.wires-online {
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--graph-wire-live) 40%, transparent));
+}
+
+.wire--online {
+  stroke: var(--graph-wire-live);
+  stroke-width: 1.75;
+  opacity: 1;
+}
+
+/* Cards */
+.device-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 22px;
+  text-align: left;
+}
+
+.device-node--current {
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Hang this device's name below the card so the card's center is the laptop's center. The wires
+   start at the card's vertical middle, so they now leave from the laptop rather than below it. */
+.device-node--current .device-node-text {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 0;
+  right: 0;
+}
+
+.device-node--peer {
+  min-width: 300px;
+}
+
+/* Illustration with a soft blue light behind it. */
+.device-art {
+  position: relative;
+  display: inline-flex;
+  isolation: isolate;
+}
+
+.device-art::before {
+  content: '';
+  position: absolute;
+  inset: -18% -12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent-base) 14%, transparent),
+    color-mix(in srgb, var(--accent-base) 4%, transparent) 60%,
+    transparent
+  );
+  filter: blur(14px);
+}
+
+.device-art svg {
+  display: block;
+  height: auto;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent-base) 12%, transparent));
+}
+
+/* Offline peers glow more softly than connected ones. */
+.device-node--peer:not(.device-node--online) .device-art::before {
+  opacity: 0.55;
+}
+
+/* Points where wires meet the cards: grey by default, blue at both ends of an online wire. */
+.device-node--current::after,
+.device-node--peer::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--graph-dot);
+  transform: translateY(-50%);
+}
+
+.device-node--current::after {
+  right: -4px;
+}
+
+.device-node--peer::before {
+  left: -4px;
+}
+
+.device-graph--connected .device-node--current::after,
+.device-node--online::before {
+  background: var(--graph-dot-live);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--graph-dot-live) 50%, transparent);
+}
+
+.device-node-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.device-node-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.device-node-label,
+.device-node-status {
+  color: var(--app-text-muted);
+}
+
+.device-node-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--graph-dot);
+}
+
+.device-node--online .status-dot {
+  background: var(--graph-dot-live);
+}
