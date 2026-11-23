@@ -16,6 +16,8 @@ The sections below preserve the original proposal. Its discovery approach withou
 
 ## Component responsibilities
 
+The [approved UI design](ui-design.md) adds a virtual device/folder namespace, explorer-based cross-device copying, Devices-based folder sharing, and an initially serial transfer queue. These are intended behaviors; queue ownership, remote sharing permissions, and the corresponding agent contracts remain to be specified. The homepage's branching graph is a presentation choice, not a requirement to relay transfers through the current device.
+
 **The browser UI only calls the agent on its own device. Agents perform all device-to-device work.** The UI displays only what its local agent reports, so the same UI can work on any device.
 
 ![Original architecture figure: React UI calls its local C++ agent over REST; that agent communicates with peers over UDP and REST and accesses primary storage.](assets/architecture.png)

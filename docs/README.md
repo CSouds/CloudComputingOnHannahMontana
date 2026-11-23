@@ -10,6 +10,7 @@ See the [project README](../README.md) for backend startup, invitations, and age
 
 - [Project overview and scope](project-overview.md): goals, team, required user capabilities, and exclusions.
 - [Architecture and API planning](architecture.md): component responsibilities, proposed tools, recorded decisions, and unresolved contracts.
+- [UI design and interaction decisions](ui-design.md): six approved blue-theme mockups, page behavior, file browsing/sharing, and transfer queue decisions.
 - [Implementation plan](implementation-plan.md): ordered tasks, deadlines, and deliverables.
 - [Evaluation plan](evaluation-plan.md): experiments, measurements, and required evidence.
 - [Original PDF](sources/file-transfer-across-network.pdf): authoritative source for this conversion.
