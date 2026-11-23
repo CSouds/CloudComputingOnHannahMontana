@@ -19,8 +19,10 @@ FetchContent_MakeAvailable(json)
 
 add_executable(FileTransfer
     src/main.cpp
-    src/register.cpp
+    src/register/register.cpp
     src/api/http.cpp
 )
 
+# Let feature folders include shared helpers relative to the source directory.
+target_include_directories(FileTransfer PRIVATE src)
 target_link_libraries(FileTransfer PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
