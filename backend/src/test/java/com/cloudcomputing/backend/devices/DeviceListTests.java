@@ -79,6 +79,23 @@ class DeviceListTests {
                 .andExpect(content().string(not(containsString("tokenHash"))));
     }
 
+    // Each device's type is returned as stored, and stays null when the device never reported one.
+    @Test
+    void returnsDeviceType() throws Exception {
+        // Arrange
+        var laptop = insertDevice(groupId, "Laptop", NOW);
+        insertDevice(groupId, "Unknown", NOW.plusSeconds(60));
+        jdbc.update("UPDATE devices SET device_type = 'laptop' WHERE id = ?", laptop.id());
+
+        // Act
+        var response = list("Bearer " + laptop.token());
+
+        // Assert
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.devices[0].deviceType").value("laptop"))
+                .andExpect(jsonPath("$.devices[1].deviceType").doesNotExist());
+    }
+
     // Revoked devices should disappear from their group's listing.
     @Test
     void excludesRevokedDevices() throws Exception {

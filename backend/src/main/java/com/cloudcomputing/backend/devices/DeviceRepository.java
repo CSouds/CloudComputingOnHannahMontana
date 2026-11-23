@@ -22,16 +22,16 @@ public class DeviceRepository {
     // Persist the backend-assigned identity; insertion failures roll back the entire enrollment.
     public void insert(Device device) {
         jdbc.update("""
-                INSERT INTO devices (id, group_id, display_name, registered_at)
-                VALUES (?, ?, ?, ?)
-                """, device.id(), device.groupId(), device.displayName(),
+                INSERT INTO devices (id, group_id, display_name, device_type, registered_at)
+                VALUES (?, ?, ?, ?, ?)
+                """, device.id(), device.groupId(), device.displayName(), device.deviceType(),
                 Timestamp.from(device.registeredAt()));
     }
 
     // Authenticate through an active credential that belongs to a device that is still active.
     public Optional<Device> findActiveByTokenHash(String tokenHash) {
         return jdbc.query("""
-                SELECT d.id, d.group_id, d.display_name, d.registered_at, d.revoked_at
+                SELECT d.id, d.group_id, d.display_name, d.device_type, d.registered_at, d.revoked_at
                 FROM devices d
                 JOIN device_credentials c ON c.device_id = d.id
                 WHERE c.token_hash = ? AND c.revoked_at IS NULL AND d.revoked_at IS NULL
@@ -41,7 +41,7 @@ public class DeviceRepository {
     // List a group's active members in a stable order for display.
     public List<Device> findActiveByGroupId(UUID groupId) {
         return jdbc.query("""
-                SELECT id, group_id, display_name, registered_at, revoked_at
+                SELECT id, group_id, display_name, device_type, registered_at, revoked_at
                 FROM devices
                 WHERE group_id = ? AND revoked_at IS NULL
                 ORDER BY registered_at, id
@@ -52,7 +52,8 @@ public class DeviceRepository {
     private static Device mapDevice(ResultSet row, int index) throws SQLException {
         var revokedAt = row.getTimestamp("revoked_at");
         return new Device(row.getObject("id", UUID.class), row.getObject("group_id", UUID.class),
-                row.getString("display_name"), row.getTimestamp("registered_at").toInstant(),
+                row.getString("display_name"), row.getString("device_type"),
+                row.getTimestamp("registered_at").toInstant(),
                 revokedAt == null ? null : revokedAt.toInstant());
     }
 }

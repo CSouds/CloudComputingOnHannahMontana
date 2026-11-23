@@ -39,7 +39,8 @@ public class DeviceService {
             UUID groupId = invitations.consumeInvitation(request.invitationToken());
             var registeredAt = clock.instant();
             // Assign identity during enrollment so a new agent only needs its invitation and name.
-            var device = new Device(UUID.randomUUID(), groupId, request.displayName().strip(), registeredAt, null);
+            var device = new Device(UUID.randomUUID(), groupId, request.displayName().strip(),
+                    request.deviceType(), registeredAt, null);
             devices.insert(device);
 
             String deviceToken = tokens.generateToken();
@@ -63,7 +64,8 @@ public class DeviceService {
         Device caller = devices.findActiveByTokenHash(tokens.hashToken(token))
                 .orElseThrow(InvalidDeviceTokenException::new);
         var members = devices.findActiveByGroupId(caller.groupId()).stream()
-                .map(device -> new DeviceSummary(device.id(), device.displayName(), device.registeredAt()))
+                .map(device -> new DeviceSummary(device.id(), device.displayName(),
+                        device.deviceType(), device.registeredAt()))
                 .toList();
         return new GroupDevicesResponse(caller.id(), members);
     }
