@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.cloudcomputing.backend.credentials.DeviceCredential;
 import com.cloudcomputing.backend.credentials.DeviceCredentialRepository;
+import com.cloudcomputing.backend.errors.exceptions.InvalidDeviceTokenException;
 import com.cloudcomputing.backend.invitations.InvitationService;
 import com.cloudcomputing.backend.security.TokenService;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,24 @@ public class DeviceService {
                     tokens.hashToken(deviceToken), registeredAt, null));
             return new RegisterDeviceResponse(device.id(), groupId, deviceToken);
         });
+    }
+
+    // Authenticate the caller by device token and list only the members of its own group.
+    public GroupDevicesResponse listGroupDevices(String authorization) {
+        String prefix = "Bearer ";
+        if (authorization == null || !authorization.startsWith(prefix)) {
+            throw new InvalidDeviceTokenException();
+        }
+        String token = authorization.substring(prefix.length());
+        if (!token.matches("[A-Za-z0-9_-]{43}")) {
+            throw new InvalidDeviceTokenException();
+        }
+
+        Device caller = devices.findActiveByTokenHash(tokens.hashToken(token))
+                .orElseThrow(InvalidDeviceTokenException::new);
+        var members = devices.findActiveByGroupId(caller.groupId()).stream()
+                .map(device -> new DeviceSummary(device.id(), device.displayName(), device.registeredAt()))
+                .toList();
+        return new GroupDevicesResponse(caller.id(), members);
     }
 }

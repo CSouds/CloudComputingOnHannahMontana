@@ -7,6 +7,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import com.cloudcomputing.backend.errors.exceptions.InvalidDeviceTokenException;
 import com.cloudcomputing.backend.errors.exceptions.InvalidInvitationException;
 
 // Keep API error responses consistent while preserving Spring's built-in HTTP statuses.
@@ -19,6 +20,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidInvitationException.class)
     public ProblemDetail handleInvalidInvitation(InvalidInvitationException exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+
+    // Return an authentication failure without revealing which token check failed.
+    @ExceptionHandler(InvalidDeviceTokenException.class)
+    public ProblemDetail handleInvalidDeviceToken(InvalidDeviceTokenException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
     // Return a safe JSON error to clients and retain debugging details in server logs.
