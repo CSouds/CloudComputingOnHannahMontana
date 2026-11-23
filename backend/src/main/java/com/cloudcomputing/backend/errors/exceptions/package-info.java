@@ -1,4 +1,4 @@
 /**
- * Custom exceptions will live here when application operations can fail.
+ * Custom exceptions describe application failures for consistent API error responses.
  */
 package com.cloudcomputing.backend.errors.exceptions;
