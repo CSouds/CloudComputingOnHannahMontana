@@ -2,8 +2,8 @@
 
 A cloud computing class project for transferring files between devices on the same network.
 
-The C++ agent currently supports device registration. The UI, authenticated requests,
-and file transfers are still to come.
+The C++ agent supports device registration, and the React UI lists registered devices.
+File transfers are still to come.
 
 ## Why a backend?
 
@@ -66,3 +66,18 @@ make
 Paste the invitation token when prompted. On success, the agent confirms registration
 and saves the device ID, group ID, and token in `agent/registration.json`. This file
 is ignored by Git. An existing file prevents registering again accidentally.
+
+## Start the UI
+
+With the backend running and a device registered, run from the project root:
+
+```sh
+cd ui
+cp .env.example .env.local
+```
+
+Set `VITE_DEVICE_TOKEN` in `.env.local` to the `deviceToken` from
+`agent/registration.json`, then run `docker compose up -d --build`.
+Open `http://localhost:3000` to see the group's devices. Other devices show offline
+until presence tracking is added. Rebuild after changing `.env.local`;
+use `docker compose stop` from `ui/` to stop the UI.
