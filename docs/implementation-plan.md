@@ -4,14 +4,16 @@ Source: [File Transfer Across Network](sources/file-transfer-across-network.pdf)
 
 ## Current addition: registration backend
 
-Confirmed November 23, 2026: use Java with Spring Boot for the shared registration backend in `backend/`; keep device agents in C++. The folder is initially empty, with no application scaffold or dependencies added.
+Confirmed November 23, 2026: use Java with Spring Boot for the shared registration backend in `backend/`; keep device agents in C++. Current progress is recorded below separately from the original proposal's schedule.
 
-- [ ] Define device identity, group membership, authorized enrollment, returning-device authentication, and revocation contracts.
-- [ ] Select persistent database storage and implement registration that survives restarts.
-- [ ] Connect the C++ agent to the backend over HTTPS with JSON.
+- [x] Implement group provisioning, single-use invitations, and registration with backend-assigned device IDs and tokens.
+- [x] Persist registration data in PostgreSQL and run Spring Boot and PostgreSQL together through Docker Compose.
+- [x] Connect the C++ registration CLI to the local backend using HTTP and JSON, and save credentials in `agent/registration.json`.
+- [ ] Load saved credentials and implement returning-device authentication and revocation.
+- [ ] Implement peer-to-peer file transfers directly between agents.
 - [ ] Select hosting and deploy the service when registration across different networks is needed.
 
-Presence tracking follows registration. Remote agent connectivity and file relaying are not introduced by this backend decision. See the [architecture decision](architecture.md#current-decision-shared-registration-backend). The original schedule below is preserved; these additions have not been assigned deadlines.
+Presence tracking follows registration. File contents will travel directly between agents, without being relayed through Spring Boot. Remote agent connectivity remains future work. See the [architecture decision](architecture.md#current-decision-shared-registration-backend). The original schedule below is preserved; these additions have not been assigned deadlines.
 
 ## Delivery order
 

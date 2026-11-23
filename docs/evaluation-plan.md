@@ -4,6 +4,10 @@ Source: [File Transfer Across Network](sources/file-transfer-across-network.pdf)
 
 Judge the project by measured behavior on real devices, not feature count. Each experiment must produce a table, screenshot, or log for the final report. Save raw results during the December 7–11 test-and-document phase.
 
+For the current architecture, measure file throughput directly between C++ agents.
+Use packet captures to confirm that file contents travel peer to peer rather than
+through the Spring Boot registration backend.
+
 ## Experiments
 
 | Experiment | What to measure | Required evidence from the source |

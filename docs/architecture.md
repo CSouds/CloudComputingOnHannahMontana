@@ -6,11 +6,11 @@ Source: [File Transfer Across Network](sources/file-transfer-across-network.pdf)
 
 Confirmed November 23, 2026, after the source proposal: build the shared backend in **Java with Spring Boot**, in the repository's `backend/` directory. The native device agents remain C++.
 
-The backend will maintain persistent device registrations and group membership, authorize enrollment, authenticate returning agents, and support revoking device access. Agents will communicate with it over HTTPS using JSON. Registration should survive agent and backend restarts; device identity must remain independent of its current IP address.
+The backend maintains persistent device registrations and group membership in PostgreSQL. Administrators create groups and single-use, expiring invitations. The C++ agent sends a display name and invitation token to `POST /devices/register`; the backend returns a generated device ID, group ID, and device token. The database stores the token's hash, and the agent saves the returned identity in `agent/registration.json`. Device identity is independent of its IP address.
 
-During development, the backend can run locally. For registration from different networks, deploy it as an internet-accessible service backed by persistent database storage. The database, hosting provider, enrollment flow, credential design, and endpoint contracts are not yet selected.
+Docker Compose runs Spring Boot and PostgreSQL together locally, with a persistent database volume. The local API uses HTTP and JSON; the agent uses libcurl and nlohmann/json. Authentication with saved credentials, revocation, and presence tracking remain future work. Hosting and HTTPS deployment must be selected before exposing registration across networks.
 
-Online/offline presence is a later addition. File operations remain agent-to-agent; the registration backend does not need to carry file transfers. Internet-accessible registration does not itself provide remote connectivity between agents, which remains future work.
+**File transfers will be peer to peer, directly between C++ agents. File contents will not pass through the Spring Boot backend or be stored in its PostgreSQL database.** The backend handles registration and group membership; file streaming belongs to the agents and is not implemented yet. Internet-accessible registration does not itself provide remote connectivity between agents, which remains future work.
 
 The sections below preserve the original proposal. Its discovery approach without a central server describes LAN peer discovery; it does not replace the newly selected shared registration backend. Its architecture figure predates this decision.
 

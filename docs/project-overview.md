@@ -18,9 +18,14 @@ Moving files and powering on machines across a home or lab network currently req
 
 A native C++ agent runs on each device, such as a MacBook, Windows desktop, or Linux NAS. A React web UI served from a Docker container talks to the agent on its own device. Agents discover peers and perform wake, status, and file operations.
 
+The current design adds a Spring Boot backend and PostgreSQL for device registration
+and group membership. **File transfers will be peer to peer between C++ agents;
+file contents will not pass through the shared backend.** Registration is implemented;
+the UI and peer-to-peer file transfers remain future work.
+
 ## Fall 2026 scope
 
-The semester deliverable is a working LAN prototype in which a device can be registered, woken over the network, and used to share folders that anyone on the network can browse, upload to, and download from. Access control is planned as a shared token, pending instructor confirmation.
+The semester deliverable is a working LAN prototype in which a device can be registered, woken over the network, and used to share folders that anyone on the network can browse, upload to, and download from. The original proposal describes shared-token access control, pending instructor confirmation. Current registration uses invitations and per-device credentials; authentication for peer-to-peer operations remains to be implemented.
 
 | Capability | Required behavior from the proposal |
 | --- | --- |

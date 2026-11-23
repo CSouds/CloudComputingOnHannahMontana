@@ -2,7 +2,9 @@
 
 This documentation converts **File Transfer Across Network** into a working reference for the Fall 2026 project. It describes the source proposal, not a claim that the features have been implemented.
 
-The [current backend decision](architecture.md#current-decision-shared-registration-backend), confirmed November 23, 2026, adds a shared Java/Spring Boot registration service in `backend/`. Device agents remain C++. This decision supplements the original proposal and does not indicate completed implementation.
+The [current backend decision](architecture.md#current-decision-shared-registration-backend), confirmed November 23, 2026, adds a shared Java/Spring Boot registration service in `backend/`. Local registration with PostgreSQL and the C++ agent is implemented; authentication with saved credentials and file transfers remain future work. **File transfers will be peer to peer between C++ agents, without routing file contents through the backend.** This supplements the original proposal.
+
+See the [project README](../README.md) for backend startup, invitations, and agent build instructions.
 
 ## Start here
 
@@ -14,7 +16,7 @@ The [current backend decision](architecture.md#current-decision-shared-registrat
 
 ## How to use these docs
 
-The PDF is the baseline project proposal. Page references in each document point to that five-page source. Proposed choices and open questions remain labeled; do not treat them as settled implementation contracts. Checkboxes are intentionally unchecked because the PDF does not establish completion.
+The PDF is the baseline project proposal. Page references in each document point to that five-page source. Proposed choices and open questions remain labeled; do not treat them as settled implementation contracts. The original proposal's checklists remain unchecked because the PDF does not establish completion; the implementation plan's current registration section records verified progress separately.
 
 The PDF's page 5 “GitHub repository” entry links to the repository below, which is also this checkout's `origin`:
 
