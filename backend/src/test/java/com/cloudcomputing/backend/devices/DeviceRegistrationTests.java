@@ -98,6 +98,53 @@ class DeviceRegistrationTests {
         assertNotNull(jdbc.queryForObject("SELECT consumed_at FROM registration_invitations WHERE id = ?", Timestamp.class, invitation.id()));
     }
 
+    // An optional device type sent at registration must be stored with the device.
+    @Test
+    void storesDeviceType() throws Exception {
+        // Arrange
+        String body = JsonMapper.builder().build().writeValueAsString(Map.of(
+                "displayName", "Desktop", "invitationToken", invitation.token(), "deviceType", "desktop"));
+
+        // Act
+        var result = mvc.perform(post("/devices/register").contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isCreated()).andReturn();
+
+        // Assert
+        UUID deviceId = UUID.fromString(JsonPath.read(result.getResponse().getContentAsString(), "$.deviceId"));
+        assertEquals("desktop", jdbc.queryForObject("SELECT device_type FROM devices WHERE id = ?", String.class, deviceId));
+    }
+
+    // Registering without a type still works and leaves the type unknown.
+    @Test
+    void leavesDeviceTypeNullWhenOmitted() throws Exception {
+        // Arrange
+        String displayName = "Desktop";
+
+        // Act
+        String body = register(displayName, invitation.token())
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+
+        // Assert
+        UUID deviceId = UUID.fromString(JsonPath.read(body, "$.deviceId"));
+        assertNull(jdbc.queryForObject("SELECT device_type FROM devices WHERE id = ?", String.class, deviceId));
+    }
+
+    // Unsupported types must be rejected before consuming the invitation.
+    @Test
+    void rejectsUnknownDeviceType() throws Exception {
+        // Arrange
+        String body = JsonMapper.builder().build().writeValueAsString(Map.of(
+                "displayName", "Desktop", "invitationToken", invitation.token(), "deviceType", "toaster"));
+
+        // Act
+        var response = mvc.perform(post("/devices/register").contentType(MediaType.APPLICATION_JSON).content(body));
+
+        // Assert
+        response.andExpect(status().isBadRequest());
+        assertEquals(0, deviceCount());
+        register("Valid name", invitation.token()).andExpect(status().isCreated());
+    }
+
     // A token that was never issued must not create a device or reveal token details in its error.
     @Test
     void rejectsUnknownInvitation() throws Exception {

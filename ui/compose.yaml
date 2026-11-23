@@ -1,0 +1,6 @@
+services:
+  # Serve the built UI with nginx; the C++ agent runs natively on the host.
+  ui:
+    build: .
+    ports:
+      - "127.0.0.1:${UI_PORT:-3000}:80"
