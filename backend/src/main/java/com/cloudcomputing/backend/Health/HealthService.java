@@ -1,4 +1,4 @@
-package com.cloudcomputing.backend.Health;
+package com.cloudcomputing.backend.health;
 
 import org.springframework.stereotype.Service;
 
