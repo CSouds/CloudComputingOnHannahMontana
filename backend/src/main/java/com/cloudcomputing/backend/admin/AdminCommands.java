@@ -13,19 +13,19 @@ import org.springframework.stereotype.Component;
  * Create groups and invitations from the backend host without exposing public management endpoints.
  * Each command saves its result and exits without starting the HTTP server.
  *
- * Run from backend/ with PostgreSQL running and database connection settings configured:
+ * Run from backend/; Compose starts both PostgreSQL and the HTTP backend:
  *
  * <pre>
  * docker compose up -d
- * ./mvnw package
- * java -jar target/backend-0.0.1-SNAPSHOT.jar admin create-group --name="My devices"
- * java -jar target/backend-0.0.1-SNAPSHOT.jar admin create-invitation --group-id="YOUR_GROUP_ID"
+ * docker compose exec backend java -jar /app/backend.jar admin create-group --name="My devices"
+ * docker compose exec backend java -jar /app/backend.jar admin create-invitation --group-id="YOUR_GROUP_ID"
  * </pre>
  *
  * Replace YOUR_GROUP_ID with the ID printed by create-group. Invitations expire after
  * 10 minutes by default; add --expires-in-minutes=15 to choose a lifetime of 1–60 minutes.
  * Save the displayed invitation token securely: it is shown only at creation and only its hash is stored.
- * Rebuild after code changes before running commands from the JAR.
+ * Run docker compose up -d --build after Java changes to rebuild and restart the backend.
+ * Run docker compose stop to stop both services without deleting database data.
  */
 @Component
 public class AdminCommands {

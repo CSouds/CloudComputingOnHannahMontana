@@ -1,4 +1,18 @@
 services:
+  # Start the API alongside PostgreSQL and connect through the Compose network.
+  backend:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-filetransfer}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-filetransfer}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-local-development-only}
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
+    depends_on:
+      # Wait for database readiness before Spring applies migrations and serves requests.
+      postgres:
+        condition: service_healthy
+
   # Give backend developers the same local PostgreSQL setup without a native install.
   postgres:
     image: postgres:18
