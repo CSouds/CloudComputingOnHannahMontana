@@ -122,3 +122,9 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Maven build output is regenerated from source.
+target/
+
+# Keep the Windows Maven wrapper despite the general command-file exclusion.
+!backend/mvnw.cmd
