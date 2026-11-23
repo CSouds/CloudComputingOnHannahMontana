@@ -1,0 +1,113 @@
+:root {
+  /* Colors come from src/themes and are applied as CSS variables at startup. */
+  --sidebar-width: 240px;
+  /* Shared by the top bar and the sidebar brand so the app name and page title line up. */
+  --top-bar-height: 72px;
+  /* Shared by the transfer bar and the sidebar footer so their top borders line up. */
+  --bottom-bar-height: 80px;
+
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: var(--app-background);
+  color: var(--app-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* Sidebar spans the full height; the right column stacks top bar, content, and transfer bar. */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'sidebar topbar'
+    'sidebar main'
+    'sidebar transfer';
+  height: 100vh;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--top-bar-height);
+  padding: 0 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sidebar-brand-icon {
+  color: var(--accent-base);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Settings sits at the bottom of the sidebar, level with the transfer bar. */
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: var(--bottom-bar-height);
+  margin-top: auto;
+  border-top: 1px solid var(--app-border);
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: var(--app-text-muted);
+  text-decoration: none;
+}
+
+.sidebar a.active {
+  color: var(--app-text);
+  background: color-mix(in srgb, var(--accent-base) 30%, transparent);
+}
+
+.topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--top-bar-height);
+  padding: 0 24px;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Only the page content scrolls; the sidebar and bars stay in place. */
+.main {
+  grid-area: main;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.transfer-bar {
+  grid-area: transfer;
+  height: var(--bottom-bar-height);
+  border-top: 1px solid var(--app-border);
+}
