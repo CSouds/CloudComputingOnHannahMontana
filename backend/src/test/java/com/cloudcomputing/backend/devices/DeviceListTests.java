@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // Use committed PostgreSQL records to verify that device listing is authenticated and group-scoped.
@@ -151,6 +152,39 @@ class DeviceListTests {
 
         // Assert
         response.andExpect(status().isUnauthorized());
+    }
+
+    // The local UI must be allowed to send its token to the device list from the browser.
+    @Test
+    void allowsLocalUiPreflight() throws Exception {
+        // Arrange
+        String origin = "http://localhost:3000";
+
+        // Act
+        var response = mvc.perform(options("/devices")
+                .header(HttpHeaders.ORIGIN, origin)
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, "Authorization"));
+
+        // Assert
+        response.andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, origin));
+    }
+
+    // Unlisted sites must not be able to read the device list from a visitor's browser.
+    @Test
+    void rejectsUnknownOriginPreflight() throws Exception {
+        // Arrange
+        String origin = "http://evil.example";
+
+        // Act
+        var response = mvc.perform(options("/devices")
+                .header(HttpHeaders.ORIGIN, origin)
+                .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET"));
+
+        // Assert
+        response.andExpect(status().isForbidden())
+                .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
     }
 
     // Exercise header handling and JSON serialization through MVC with the real service.
