@@ -5,6 +5,9 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <cerrno>
+#include <fcntl.h>
+#include <unistd.h>
 
 // Accept only the 43 URL-safe characters required by the backend's invitation format.
 bool Register::validateToken(const std::string& token) const {
@@ -47,4 +50,35 @@ std::string Register::registerDevice(
     if (response.status != 201)
         throw std::runtime_error("Registration failed with HTTP " + std::to_string(response.status) + ".");
     return response.body;
+}
+
+// Save only a complete device identity, without overwriting credentials from an earlier enrollment.
+void Register::saveRegistration(const std::string& response, const std::string& filePath) const {
+    const auto registration = nlohmann::json::parse(response);
+    if (registration.at("deviceId").get<std::string>().empty() ||
+        registration.at("groupId").get<std::string>().empty() ||
+        !validateToken(registration.at("deviceToken").get<std::string>())) {
+        throw std::runtime_error("The backend returned incomplete registration details.");
+    }
+    const std::string data = registration.dump(2) + '\n';
+
+    // Create an owner-only file from the outset so other users cannot read the device token.
+    const int file = ::open(filePath.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0600);
+    if (file < 0)
+        throw std::runtime_error("Device registered, but could not create " + filePath + ".");
+
+    // Finish and flush every byte before claiming the credential was saved.
+    std::size_t offset = 0;
+    while (offset < data.size()) {
+        const auto written = ::write(file, data.data() + offset, data.size() - offset);
+        if (written < 0 && errno == EINTR) continue;
+        if (written <= 0) break;
+        offset += static_cast<std::size_t>(written);
+    }
+    const bool flushed = offset == data.size() && ::fsync(file) == 0;
+    const bool closed = ::close(file) == 0;
+    if (!flushed || !closed) {
+        ::unlink(filePath.c_str());
+        throw std::runtime_error("Device registered, but could not save all details to " + filePath + ".");
+    }
 }

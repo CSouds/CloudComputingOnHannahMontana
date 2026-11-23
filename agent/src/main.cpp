@@ -1,6 +1,7 @@
 #include "register/register.hpp"
 
 #include <exception>
+#include <filesystem>
 #include <iostream>
 #include <string_view>
 
@@ -29,12 +30,19 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // Confirm enrollment with the device name instead of showing the backend response.
+    // Preserve an existing identity and confirm success only after the new credentials are saved.
     try {
-        registration.registerDevice(argv[2], argv[3], token);
-        std::cout << displayName << " has been registered successfully!\n";
+        const auto filePath = std::filesystem::path(FILETRANSFER_AGENT_DIR) / "registration.json";
+        if (std::filesystem::exists(filePath)) {
+            std::cerr << "Registration details already exist in " << filePath.string() << ".\n";
+            return 1;
+        }
+        const std::string response = registration.registerDevice(argv[2], argv[3], token);
+        registration.saveRegistration(response, filePath.string());
+        std::cout << displayName << " has been registered successfully!\n"
+                  << "Registration details saved to " << std::filesystem::absolute(filePath).string() << ".\n";
     } catch (const std::exception& error) {
-        std::cerr << "Registration failed: " << error.what() << '\n';
+        std::cerr << "Error: " << error.what() << '\n';
         return 1;
     }
     return 0;

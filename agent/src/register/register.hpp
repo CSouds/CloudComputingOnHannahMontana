@@ -16,4 +16,7 @@ public:
         const std::string& displayName,
         const std::string& invitationToken
     ) const;
+
+    // Keep the returned device identity available after the agent exits.
+    void saveRegistration(const std::string& response, const std::string& filePath) const;
 };

@@ -128,3 +128,6 @@ target/
 
 # Keep the Windows Maven wrapper despite the general command-file exclusion.
 !backend/mvnw.cmd
+
+# Device credentials belong to the local installation and must not be committed.
+registration.json

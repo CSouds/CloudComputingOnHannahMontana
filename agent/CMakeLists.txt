@@ -25,4 +25,7 @@ add_executable(FileTransfer
 
 # Let feature folders include shared helpers relative to the source directory.
 target_include_directories(FileTransfer PRIVATE src)
+
+# Save this installation's credentials in agent/ regardless of the shell's working directory.
+target_compile_definitions(FileTransfer PRIVATE FILETRANSFER_AGENT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(FileTransfer PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
