@@ -10,6 +10,7 @@ interface QueueDrag {
   from: number
   to: number
   pointerOffset: number
+  scale: number
   rows: { top: number; height: number }[]
 }
 
@@ -46,7 +47,9 @@ export default function TransferQueue() {
       const bounds = row.getBoundingClientRect()
       return { top: bounds.top - top, height: bounds.height }
     })
-    const session = { id, from, to: from, rows, pointerOffset: pointerY - top - rows[from].top - rows[from].height / 2 }
+    // Slot measurements are screen pixels; neighbor transforms need the unscaled layout distance.
+    const scale = list.getBoundingClientRect().width / Number.parseFloat(getComputedStyle(list).width)
+    const session = { id, from, to: from, rows, scale, pointerOffset: pointerY - top - rows[from].top - rows[from].height / 2 }
     dragRef.current = session
     setDrag(session)
   }
@@ -195,7 +198,7 @@ export default function TransferQueue() {
               item={item}
               disabled={isChanging}
               isDragging={drag?.id === item.id}
-              offset={rowOffset(index)}
+              offset={rowOffset(index) / (drag?.scale ?? 1)}
               onStart={() => void updateQueue(() => startQueuedTransfer(item.id))}
               onCancel={() => void updateQueue(() => cancelQueuedTransfer(item.id))}
               onMove={(direction) => {

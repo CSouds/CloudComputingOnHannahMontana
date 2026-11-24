@@ -14,7 +14,7 @@ export default function DeviceNode({ device, isCurrent = false, isOnline = false
 
   return (
     <div className={className}>
-      <DeviceArt deviceType={device.deviceType} width={isCurrent ? 190 : 130} />
+      <DeviceArt deviceType={device.deviceType} width={isCurrent ? 190 : 130} alignLeft={!isCurrent} />
       <span className="device-node-text">
         <span className="device-node-name">{device.displayName}</span>
         {/* The UI runs on this device, so it can never be offline; label it instead of showing a status. */}

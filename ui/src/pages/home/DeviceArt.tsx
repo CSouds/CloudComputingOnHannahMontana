@@ -85,7 +85,8 @@ function Gradients({ id }: { id: string }) {
 // and a wider aluminum base showing a strip of keyboard and the front notch.
 function LaptopArt({ id }: { id: string }) {
   return (
-    <>
+    // Enlarge the MacBook by 10% while keeping it centered on the shared baseline.
+    <g transform="translate(60 72) scale(1.1) translate(-60 -63.4)">
       {/* Lid */}
       <rect x="22" y="4" width="76" height="52" rx="3.5" fill={`url(#${id}-silver)`} />
       <rect x="22.8" y="4.8" width="74.4" height="50.8" rx="2.9" style={fill(hardware.bezel)} />
@@ -99,10 +100,11 @@ function LaptopArt({ id }: { id: string }) {
       <path d="M 11 60 H 109 V 61.6 Q 109 63.4 107 63.4 H 13 Q 11 63.4 11 61.6 Z" fill={`url(#${id}-front)`} />
       <path d="M 52 60 H 68 Q 68 61.3 66.7 61.3 H 53.3 Q 52 61.3 52 60 Z" style={fill(hardware.notch)} />
       <path d="M 11.5 60 H 108.5" style={{ stroke: hardware.highlight }} strokeWidth="0.35" opacity="0.6" />
-    </>
+    </g>
   )
 }
 
+// Show the Windows monitor and tower together on the shared device baseline.
 function DesktopArt({ id }: { id: string }) {
   return (
     <>
@@ -117,10 +119,11 @@ function DesktopArt({ id }: { id: string }) {
   )
 }
 
+// Keep the server's feet level with the other device illustrations.
 function ServerArt({ id }: { id: string }) {
   const bays = [0, 1, 2, 3]
   return (
-    <>
+    <g transform="translate(0 2)">
       <rect x="12" y="8" width="96" height="62" rx="6" fill={`url(#${id}-case)`} style={{ stroke: hardware.caseEdge }} strokeWidth="0.8" />
       {bays.map((bay) => (
         <g key={bay}>
@@ -131,7 +134,7 @@ function ServerArt({ id }: { id: string }) {
       {[22, 30, 38].map((y) => (
         <circle key={y} cx="99" cy={y} r="1.4" style={fill(hardware.led)} opacity="0.8" />
       ))}
-    </>
+    </g>
   )
 }
 
@@ -156,17 +159,24 @@ const artByType = {
 interface DeviceArtProps {
   deviceType: DeviceType | null
   width: number
+  alignLeft?: boolean
 }
 
 // Illustrated device with a soft blue backglow; the glow lives in DeviceGraph.css.
-export default function DeviceArt({ deviceType, width }: DeviceArtProps) {
+export default function DeviceArt({ deviceType, width, alignLeft = false }: DeviceArtProps) {
   const id = `art${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   const Art = deviceType ? artByType[deviceType] : GenericArt
+  // Center the Mac over the server's case, which sits left of the SVG canvas center.
+  // Keep the current device centered in its separate column.
+  const leftOffsets = { laptop: -8.35, desktop: 0, server: -8.35 }
+  const offset = alignLeft ? (deviceType ? leftOffsets[deviceType] : -16) : 0
   return (
     <span className="device-art">
       <svg viewBox="0 0 120 76" width={width} aria-hidden="true">
         <Gradients id={id} />
-        <Art id={id} />
+        <g transform={`translate(${offset} 0)`}>
+          <Art id={id} />
+        </g>
       </svg>
     </span>
   )

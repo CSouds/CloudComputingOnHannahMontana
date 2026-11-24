@@ -48,8 +48,8 @@ body {
 /* Sidebar spans the full height; the right column stacks top bar, content, and transfer bar. */
 .app {
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   grid-template-areas:
     'sidebar topbar'
     'sidebar main'
@@ -155,11 +155,19 @@ body {
   cursor: default;
 }
 
-/* Only the page content scrolls; the sidebar and bars stay in place. */
+/* Only page content scrolls vertically; its inner layout scales to the available width. */
 .main {
   grid-area: main;
+  min-width: 0;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
+}
+
+/* Long unbroken names must wrap rather than widen the entire main region. */
+.main-content {
+  overflow-wrap: anywhere;
 }
 
 .transfer-bar {

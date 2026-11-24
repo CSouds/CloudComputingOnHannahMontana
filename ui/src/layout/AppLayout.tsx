@@ -1,8 +1,11 @@
 import { ArrowLeftRight, UserRound } from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router'
-import { useSyncExternalStore } from 'react'
+import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { getActiveTransfer, subscribeActiveTransfer } from '../services/transfers'
 import { mainRoutes, settingsRoute } from '../routes'
+
+// Keep device cards and transfer controls at their intended proportions when the main area shrinks.
+const MIN_CONTENT_WIDTH = 760
 
 // Keep the selected active file visible across page navigation.
 export default function AppLayout() {
@@ -11,6 +14,18 @@ export default function AppLayout() {
   const title = [...mainRoutes, settingsRoute].find((route) => route.path === pathname)?.title
   // Transfers shows the active job in its own content, so it hides the bar.
   const showTransferBar = pathname !== '/transfers'
+
+  // Measure only the available content width so scaling cannot feed back into its own measurement.
+  const mainRef = useRef<HTMLElement>(null)
+  const [contentWidth, setContentWidth] = useState<number | null>(null)
+  useLayoutEffect(() => {
+    const main = mainRef.current
+    if (!main) return
+    const observer = new ResizeObserver(([entry]) => setContentWidth(entry.contentRect.width))
+    observer.observe(main)
+    return () => observer.disconnect()
+  }, [])
+  const scale = contentWidth === null ? 1 : Math.min(1, contentWidth / MIN_CONTENT_WIDTH)
 
   return (
     <div className="app">
@@ -45,8 +60,14 @@ export default function AppLayout() {
         </button>
       </header>
 
-      <main className="main">
-        <Outlet />
+      <main className="main" ref={mainRef}>
+        {/* CSS zoom keeps scaled content in normal flow so vertical scrolling matches its visible height. */}
+        <div className="main-content" style={{
+          zoom: scale,
+          width: contentWidth === null ? undefined : Math.max(MIN_CONTENT_WIDTH, contentWidth),
+        }}>
+          <Outlet />
+        </div>
       </main>
 
       {showTransferBar && (

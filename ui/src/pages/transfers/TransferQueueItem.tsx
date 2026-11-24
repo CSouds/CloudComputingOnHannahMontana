@@ -33,7 +33,7 @@ export default function TransferQueueItem({
   const contentRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLLIElement | null>(null)
   const pointerRef = useRef<{
-    id: number; x: number; y: number; bounds: DOMRect; active: boolean
+    id: number; x: number; y: number; bounds: DOMRect; scale: number; active: boolean
   } | null>(null)
 
   // Escape and unmount must remove the floating row, including when no pointer-up arrives.
@@ -64,6 +64,8 @@ export default function TransferQueueItem({
     pointerRef.current = {
       id: event.pointerId, x: event.clientX, y: event.clientY,
       bounds: row.getBoundingClientRect(), active: false,
+      // The floating copy lives outside main, so preserve the size the user picked up.
+      scale: row.getBoundingClientRect().width / Number.parseFloat(getComputedStyle(row).width),
     }
   }
 
@@ -76,7 +78,8 @@ export default function TransferQueueItem({
       if (Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) < 5) return
       const preview = row.cloneNode(true) as HTMLLIElement
       preview.className = 'transfer-queue-item transfer-queue-drag-preview'
-      preview.style.width = `${pointer.bounds.width}px`
+      preview.style.width = `${pointer.bounds.width / pointer.scale}px`
+      preview.style.transformOrigin = 'top left'
       preview.setAttribute('aria-hidden', 'true')
       preview.inert = true
       previewRef.current = preview
@@ -86,7 +89,7 @@ export default function TransferQueueItem({
       onDragStart(pointer.y)
     }
     if (previewRef.current) {
-      previewRef.current.style.transform = `translate(${event.clientX - pointer.x + pointer.bounds.left}px, ${event.clientY - pointer.y + pointer.bounds.top}px)`
+      previewRef.current.style.transform = `translate(${event.clientX - pointer.x + pointer.bounds.left}px, ${event.clientY - pointer.y + pointer.bounds.top}px) scale(${pointer.scale})`
     }
     onDragMove(event.clientX, event.clientY)
   }
@@ -175,9 +178,11 @@ export default function TransferQueueItem({
         onClick={(event) => {
           // Keep actions inside the viewport even on the final visible queue row.
           const bounds = event.currentTarget.getBoundingClientRect()
+          // Top-layer popovers inherit main's zoom but use viewport coordinates for placement.
+          const scale = bounds.width / Number.parseFloat(getComputedStyle(event.currentTarget).width)
           setMenuPosition({
-            top: Math.max(8, Math.min(bounds.bottom + 6, window.innerHeight - 112)),
-            left: Math.max(8, Math.min(bounds.right - 224, window.innerWidth - 232)),
+            top: Math.max(8, Math.min(bounds.bottom + 6 * scale, window.innerHeight - 112 * scale)) / scale,
+            left: Math.max(8, Math.min(bounds.right - 224 * scale, window.innerWidth - 232 * scale)) / scale,
           })
         }}
       >
