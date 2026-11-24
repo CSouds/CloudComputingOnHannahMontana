@@ -1,0 +1,29 @@
+[
+  {
+    "id": "completed-1",
+    "name": "Demo recording.mp4",
+    "type": "mp4",
+    "size": "1.4 GB",
+    "source": "MacBook Pro",
+    "destination": "Gaming PC",
+    "completedAt": "2026-11-24T18:30:00Z"
+  },
+  {
+    "id": "completed-2",
+    "name": "Design assets.zip",
+    "type": "zip",
+    "size": "200 MB",
+    "source": "Linux PC",
+    "destination": "MacBook Pro",
+    "completedAt": "2026-11-24T18:15:00Z"
+  },
+  {
+    "id": "completed-3",
+    "name": "Mountain sunrise.png",
+    "type": "png",
+    "size": "8 MB",
+    "source": "MacBook Pro",
+    "destination": "Gaming PC",
+    "completedAt": "2026-11-24T18:00:00Z"
+  }
+]

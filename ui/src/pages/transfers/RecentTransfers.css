@@ -1,0 +1,148 @@
+/* Fill the same Home region as the queue when there are no waiting transfers. */
+.recent-transfers {
+  width: 100%;
+  margin-top: 48px;
+  border-top: 1px solid var(--app-border);
+}
+
+.recent-transfers--history {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.recent-transfers-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.recent-transfers-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.recent-transfers-history-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-bright);
+  text-decoration: none;
+}
+
+.recent-transfers-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Match queue row spacing so completed files have the same visual weight as waiting files. */
+.recent-transfer-item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 100px 22px auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 80px;
+  padding: 16px 0;
+}
+
+.recent-transfer-item + .recent-transfer-item {
+  border-top: 1px solid var(--app-border);
+}
+
+.recent-transfer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.recent-transfer-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.recent-transfer-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+
+.recent-transfer-size {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.recent-transfer-completed {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.recent-transfer-completed svg {
+  color: var(--status-success);
+}
+
+/* Files is currently a navigation destination; locating an individual file awaits the explorer API. */
+.recent-transfer-files {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  border-radius: 6px;
+  color: var(--app-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.recent-transfer-files:hover {
+  background: var(--app-hover);
+  border-color: var(--accent-base);
+  color: var(--accent-bright);
+}
+
+.recent-transfers-history-link:hover,
+.recent-transfers-empty a:hover {
+  text-decoration: underline;
+}
+
+/* Keep the first-use prompt small and direct instead of adding an empty dashboard illustration. */
+.recent-transfers-empty {
+  margin: 0;
+  padding: 24px 0;
+  color: var(--app-text-muted);
+}
+
+.recent-transfers-empty a {
+  color: var(--accent-bright);
+  text-decoration: none;
+}
+
+/* Keep sizes, completion checks, and Files aligned on the right even in narrow layouts. */
+@media (max-width: 1100px) {
+  .recent-transfer-item {
+    grid-template-columns: 36px minmax(0, 1fr) auto 22px auto;
+    gap: 12px;
+  }
+
+  .recent-transfer-size {
+    font-size: 0.875rem;
+  }
+}

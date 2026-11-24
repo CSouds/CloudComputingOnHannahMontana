@@ -37,10 +37,10 @@ export default function DeviceGraph({ currentDevice, peers, onlineDeviceIds }: D
       {peers.length > 0 ? (
         <>
           <div className="device-graph-wires" ref={wiresRef}>
-            {/* Every peer has a wire; offline wires are quiet grey lines. */}
+            {/* Dashed grey wires let users distinguish offline peers without relying on color. */}
             <svg width={size.width} height={size.height} aria-hidden="true">
               {peers.map((peer, index) => !onlineDeviceIds.has(peer.id) && (
-                <path key={peer.id} className="wire" d={paths[index]} />
+                <path key={peer.id} className="wire wire--offline" d={paths[index]} />
               ))}
             </svg>
             {/* Online wires get their own layer so the CSS glow applies to them alone. */}

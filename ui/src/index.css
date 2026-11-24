@@ -6,7 +6,6 @@
   /* Shared by the transfer bar and the sidebar footer so their top borders line up. */
   --bottom-bar-height: 80px;
 
-  color-scheme: dark;
   font-family: system-ui, sans-serif;
   background: var(--app-background);
   color: var(--app-text);
@@ -14,6 +13,32 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* One hover/focus language for the whole app: every link and button eases between states at the
+   same speed, and keyboard focus always shows the same accent ring. Only interactive elements get
+   hover styles; display-only rows and cards stay still so hover always means "you can click this". */
+a,
+button,
+[role='group'][tabindex] {
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button,
+  [role='group'][tabindex] {
+    transition: none;
+  }
 }
 
 body {
@@ -44,13 +69,19 @@ body {
   align-items: center;
   gap: 10px;
   height: var(--top-bar-height);
-  padding: 0 12px;
+  /* Reach the sidebar edges so the header band runs unbroken across the whole window. */
+  margin: 0 -16px 12px;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--header-border);
+  background: var(--header-background);
+  color: var(--header-text);
   font-size: 1.1rem;
   font-weight: 600;
 }
 
 .sidebar-brand-icon {
-  color: var(--accent-base);
+  /* The app identity follows readable header text rather than the selected accent. */
+  color: var(--header-text);
 }
 
 .sidebar-nav {
@@ -79,9 +110,18 @@ body {
   text-decoration: none;
 }
 
+.sidebar a:hover {
+  color: var(--app-text);
+  background: var(--app-hover);
+}
+
 .sidebar a.active {
   color: var(--app-text);
-  background: color-mix(in srgb, var(--accent-base) 30%, transparent);
+  background: var(--accent-soft);
+}
+
+.sidebar a:focus-visible {
+  outline-offset: -2px;
 }
 
 .topbar {
@@ -91,12 +131,28 @@ body {
   justify-content: space-between;
   height: var(--top-bar-height);
   padding: 0 24px;
-  border-bottom: 1px solid var(--app-border);
+  border-bottom: 1px solid var(--header-border);
+  background: var(--header-background);
+  color: var(--header-text);
 }
 
 .topbar h1 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+/* Keep the future account entry point visible in the top right on every page. */
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font: inherit;
+  cursor: default;
 }
 
 /* Only the page content scrolls; the sidebar and bars stay in place. */
@@ -110,4 +166,13 @@ body {
   grid-area: transfer;
   height: var(--bottom-bar-height);
   border-top: 1px solid var(--app-border);
+}
+
+/* Truncate long active filenames so the fixed footer never expands the page width. */
+.transfer-bar-active {
+  display: block;
+  padding: 16px 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

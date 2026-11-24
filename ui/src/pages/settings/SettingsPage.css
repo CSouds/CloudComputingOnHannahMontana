@@ -1,0 +1,97 @@
+.settings-section h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.settings-hint {
+  margin: 4px 0 16px;
+  color: var(--app-text-muted);
+}
+
+.theme-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Each theme is a card; hover and selection follow the shared interactive styles in index.css. */
+.theme-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 200px;
+  padding: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.theme-option:hover {
+  border-color: var(--accent-base);
+  background: var(--app-hover);
+}
+
+.theme-option[aria-checked='true'] {
+  border-color: var(--accent-base);
+  box-shadow: 0 0 0 1px var(--accent-base);
+}
+
+.theme-swatch {
+  position: relative;
+  display: block;
+  height: 96px;
+  overflow: hidden;
+  border: 1px solid;
+  border-radius: 6px;
+}
+
+.theme-swatch-header {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 28px;
+}
+
+.theme-swatch-line {
+  position: absolute;
+  top: 48px;
+  left: 12px;
+  width: 50%;
+  height: 6px;
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+.theme-swatch-button {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 52px;
+  height: 20px;
+  border-radius: 999px;
+}
+
+.theme-option-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.theme-option-default {
+  color: var(--app-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.theme-option-check {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  color: var(--accent-bright);
+}
