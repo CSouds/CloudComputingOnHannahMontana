@@ -104,7 +104,8 @@
   min-height: 36px;
   padding: 6px 10px;
   font-size: 0.875rem;
-  border: 1px solid var(--app-text-muted);
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
   border-radius: 6px;
   color: var(--app-text);
   text-decoration: none;
@@ -112,18 +113,14 @@
 }
 
 .recent-transfer-files:hover {
-  background: var(--app-surface);
-  border-color: var(--accent-bright);
+  background: var(--app-hover);
+  border-color: var(--accent-base);
+  color: var(--accent-bright);
 }
 
 .recent-transfers-history-link:hover,
 .recent-transfers-empty a:hover {
   text-decoration: underline;
-}
-
-.recent-transfers a:focus-visible {
-  outline: 2px solid var(--accent-bright);
-  outline-offset: 4px;
 }
 
 /* Keep the first-use prompt small and direct instead of adding an empty dashboard illustration. */
