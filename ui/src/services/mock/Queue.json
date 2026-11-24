@@ -1,0 +1,290 @@
+[
+  {
+    "id": "transfer-1",
+    "name": "Design assets.zip",
+    "type": "zip",
+    "size": "200 MB",
+    "priority": 1,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-2",
+    "name": "Lecture notes.pdf",
+    "type": "pdf",
+    "size": "12 MB",
+    "priority": 2,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-3",
+    "name": "Mountain sunrise.png",
+    "type": "png",
+    "size": "8 MB",
+    "priority": 3,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-4",
+    "name": "Demo recording.mp4",
+    "type": "mp4",
+    "size": "1.4 GB",
+    "priority": 4,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-5",
+    "name": "Background music.mp3",
+    "type": "mp3",
+    "size": "24 MB",
+    "priority": 5,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-6",
+    "name": "TransferQueue.tsx",
+    "type": "tsx",
+    "size": "6 KB",
+    "priority": 6,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-7",
+    "name": "Device settings.json",
+    "type": "json",
+    "size": "2 KB",
+    "priority": 7,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-8",
+    "name": "Project budget.xlsx",
+    "type": "xlsx",
+    "size": "640 KB",
+    "priority": 8,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-9",
+    "name": "Shared projects",
+    "type": "folder",
+    "size": "3.2 GB",
+    "priority": 9,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-10",
+    "name": "Unknown format.mystery",
+    "type": "mystery",
+    "size": "17 MB",
+    "priority": 10,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-11",
+    "name": "README.md",
+    "type": "md",
+    "size": "1 KB",
+    "priority": 11,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-12",
+    "name": ".gitignore",
+    "type": "file",
+    "size": "512 B",
+    "priority": 12,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-13",
+    "name": "UPPERCASE PHOTO.JPG",
+    "type": "jpg",
+    "size": "4 MB",
+    "priority": 13,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-14",
+    "name": "UPPERCASE REPORT.PDF",
+    "type": "pdf",
+    "size": "3 MB",
+    "priority": 14,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-15",
+    "name": "Quarterly-report-with-a-very-long-filename-that-should-truncate-without-pushing-the-cancel-button-off-screen.pdf",
+    "type": "pdf",
+    "size": "18 MB",
+    "priority": 15,
+    "source": "Upstairs workstation with a deliberately long device name",
+    "destination": "Shared storage server with a deliberately long device name"
+  },
+  {
+    "id": "transfer-16",
+    "name": "Archive.backup.2026.zip",
+    "type": "zip",
+    "size": "950 MB",
+    "priority": 16,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-17",
+    "name": "Portrait.heic",
+    "type": "heic",
+    "size": "5 MB",
+    "priority": 17,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-18",
+    "name": "Animation.webm",
+    "type": "webm",
+    "size": "420 MB",
+    "priority": 18,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-19",
+    "name": "Interview.flac",
+    "type": "flac",
+    "size": "120 MB",
+    "priority": 19,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-20",
+    "name": "main.cpp",
+    "type": "cpp",
+    "size": "14 KB",
+    "priority": 20,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-21",
+    "name": "events.jsonl",
+    "type": "jsonl",
+    "size": "32 MB",
+    "priority": 21,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-22",
+    "name": "Device inventory.csv",
+    "type": "csv",
+    "size": "90 KB",
+    "priority": 22,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-23",
+    "name": "Folder.with.dots.zip",
+    "type": "folder",
+    "size": "2.1 GB",
+    "priority": 23,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-24",
+    "name": "Empty file",
+    "type": "file",
+    "size": "0 B",
+    "priority": 24,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-25",
+    "name": "Holiday photos.jpeg",
+    "type": "jpeg",
+    "size": "9 MB",
+    "priority": 25,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-26",
+    "name": "Screen capture.mov",
+    "type": "mov",
+    "size": "2.8 GB",
+    "priority": 26,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-27",
+    "name": "Podcast.wav",
+    "type": "wav",
+    "size": "380 MB",
+    "priority": 27,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-28",
+    "name": "registration.py",
+    "type": "py",
+    "size": "8 KB",
+    "priority": 28,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-29",
+    "name": "preferences.jsonc",
+    "type": "jsonc",
+    "size": "4 KB",
+    "priority": 29,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-30",
+    "name": "Measurements.ods",
+    "type": "ods",
+    "size": "1.2 MB",
+    "priority": 30,
+    "source": "MacBook Pro",
+    "destination": "Home NAS"
+  },
+  {
+    "id": "transfer-31",
+    "name": "Unsupported archive.rar",
+    "type": "rar",
+    "size": "600 MB",
+    "priority": 31,
+    "source": "Home NAS",
+    "destination": "MacBook Pro"
+  },
+  {
+    "id": "transfer-32",
+    "name": "Final queued file.zip",
+    "type": "zip",
+    "size": "48 MB",
+    "priority": 32,
+    "source": "Studio PC",
+    "destination": "MacBook Pro"
+  }
+]

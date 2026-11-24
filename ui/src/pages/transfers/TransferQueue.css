@@ -1,0 +1,308 @@
+/* Use the full content width so the queue aligns with the page edges on wide screens. */
+.transfer-queue {
+  width: 100%;
+  margin: 48px 0 0;
+  border-top: 1px solid var(--app-border);
+}
+
+/* Keep the queue count beside its heading as part of the normal page flow. */
+.transfer-queue-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 16px 0;
+  background: var(--app-background);
+}
+
+.transfer-queue h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.transfer-queue-count {
+  color: var(--app-text-muted);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.transfer-queue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Match history row spacing so waiting and completed files have the same visual weight. */
+.transfer-queue-item {
+  --queue-columns: 36px minmax(0, 1fr) 100px auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--queue-columns);
+  align-items: center;
+  column-gap: 16px;
+  min-height: 80px;
+}
+
+/* Move the file and its controls together while the outer row preserves the queue's height. */
+.transfer-queue-item-content {
+  display: grid;
+  grid-template-columns: var(--queue-columns);
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-items: center;
+  column-gap: inherit;
+  min-width: 0;
+  min-height: 80px;
+  padding: 16px 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.transfer-queue-item-content > .transfer-queue-file-icon { grid-column: 1; }
+.transfer-queue-item-content > .transfer-queue-details { grid-column: 2; }
+.transfer-queue-item-content .transfer-queue-size { grid-column: 3; }
+.transfer-queue-item-content > .transfer-queue-actions { grid-column: 4; }
+
+/* Keep the grabbing cursor visible even when the carried row passes outside the queue. */
+body.transfer-queue-reordering,
+body.transfer-queue-reordering * {
+  cursor: grabbing !important;
+}
+
+.transfer-queue-item + .transfer-queue-item {
+  border-top: 1px solid var(--app-border);
+}
+
+/* Animate displaced neighbors while leaving an empty landing slot for the carried row. */
+.transfer-queue-list--reordering .transfer-queue-item-content {
+  transition: transform 160ms ease;
+}
+
+.transfer-queue-item--dragging > .transfer-queue-item-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Carry the complete row above the app while pointer capture stays on the original content. */
+.transfer-queue-drag-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  margin: 0;
+  border: 1px solid var(--accent-base);
+  border-radius: 8px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--app-background) 65%, transparent);
+  pointer-events: none;
+}
+
+/* Respect reduced-motion preferences while still showing the proposed positions. */
+@media (prefers-reduced-motion: reduce) {
+  .transfer-queue-list--reordering .transfer-queue-item-content {
+    transition: none;
+  }
+}
+
+.transfer-queue-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.transfer-queue-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.transfer-queue-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+
+/* Align file sizes across rows so users can compare waiting transfers. */
+.transfer-queue-meta {
+  display: contents;
+}
+
+.transfer-queue-size {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  padding-right: 0;
+  font-size: 0.875rem;
+}
+
+/* Keep the main action visible and secondary actions behind a quiet overflow control. */
+.transfer-queue-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* A light play symbol keeps starting a transfer visible without dominating the file row. */
+.transfer-queue-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--app-border) 30%, transparent);
+  color: var(--app-text-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.transfer-queue-start:hover:not(:disabled) {
+  background: var(--app-surface);
+  color: var(--accent-bright);
+}
+
+/* Keep controls visually quiet while preserving a visible keyboard focus target. */
+.transfer-queue-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--app-text);
+  cursor: pointer;
+}
+
+.transfer-queue-item-content:active {
+  cursor: grabbing;
+}
+
+/* Prevent conflicting requests while the service is saving a queue change. */
+.transfer-queue-item-content[aria-disabled='true'],
+.transfer-queue-start:disabled,
+.transfer-queue-more:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* Highlight the overflow control separately from the row's drag affordance. */
+.transfer-queue-more:hover {
+  background: var(--app-surface);
+  color: var(--accent-bright);
+}
+
+.transfer-queue-item-content:focus-visible,
+.transfer-queue-start:focus-visible,
+.transfer-queue-more:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+/* The top-layer panel stays above carried rows and provides ordinary Tab-accessible actions. */
+.transfer-queue-menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  width: min(224px, calc(100vw - 16px));
+  padding: 6px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: 0 8px 24px #0005;
+  cursor: default;
+  touch-action: auto;
+}
+
+.transfer-queue-menu a,
+.transfer-queue-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.transfer-queue-menu a:hover,
+.transfer-queue-menu button:hover {
+  background: var(--app-background);
+}
+
+.transfer-queue-menu a:focus-visible,
+.transfer-queue-menu button:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: -2px;
+}
+
+.transfer-queue-empty {
+  margin: 0;
+  padding: 16px 0;
+  color: var(--app-text-muted);
+}
+
+/* Let people reveal the rest of the queue without leaving their Home context. */
+.transfer-queue-show-more {
+  display: block;
+  margin-top: 8px;
+  padding: 8px 4px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent-bright);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.transfer-queue-show-more:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.transfer-queue-show-more:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+.transfer-queue-show-more:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* Keep file sizes beside Start now when space is tight so details stay in the left column. */
+@media (max-width: 1100px) {
+  .transfer-queue-item {
+    --queue-columns: 36px minmax(0, 1fr) auto auto;
+    column-gap: 12px;
+  }
+
+  .transfer-queue-size {
+    padding-right: 0;
+    font-size: 0.875rem;
+  }
+}

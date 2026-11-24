@@ -14,6 +14,10 @@ export interface Theme {
     bright: string
     brightest: string
   }
+  // Transfer outcomes need a consistent success color in every theme.
+  status: {
+    success: string
+  }
   // Device graph wires and the dots where wires meet devices.
   graph: {
     wire: string

@@ -35,3 +35,6 @@ export async function getDevices(signal?: AbortSignal): Promise<GroupDevices> {
   }
   return response.json()
 }
+
+// Presence is mocked until the local agent can report reachable devices.
+export { getOnlineDeviceIds } from './mock/devices'

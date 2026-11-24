@@ -50,7 +50,8 @@ body {
 }
 
 .sidebar-brand-icon {
-  color: var(--accent-base);
+  /* The app identity follows readable theme text rather than the selected accent. */
+  color: var(--app-text);
 }
 
 .sidebar-nav {
@@ -99,6 +100,20 @@ body {
   font-size: 1.5rem;
 }
 
+/* Keep the future account entry point visible in the top right on every page. */
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font: inherit;
+  cursor: default;
+}
+
 /* Only the page content scrolls; the sidebar and bars stay in place. */
 .main {
   grid-area: main;
@@ -110,4 +125,13 @@ body {
   grid-area: transfer;
   height: var(--bottom-bar-height);
   border-top: 1px solid var(--app-border);
+}
+
+/* Truncate long active filenames so the fixed footer never expands the page width. */
+.transfer-bar-active {
+  display: block;
+  padding: 16px 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

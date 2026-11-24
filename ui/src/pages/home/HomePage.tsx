@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { getDevices, type GroupDevices } from '../../services/devices'
+import { getDevices, getOnlineDeviceIds, type GroupDevices } from '../../services/devices'
 import DeviceGraph from './DeviceGraph'
+import TransferQueue from '../transfers/TransferQueue'
 
 export default function HomePage() {
   const [result, setResult] = useState<GroupDevices | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [onlineDeviceIds, setOnlineDeviceIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     // Effects can't be async themselves, so define and call an async function inside.
@@ -12,7 +14,14 @@ export default function HomePage() {
 
     async function loadDevices() {
       try {
-        setResult(await getDevices(controller.signal))
+        // Load identity and presence through services so the graph needs no transport knowledge.
+        const [devices, onlineIds] = await Promise.all([
+          getDevices(controller.signal),
+          getOnlineDeviceIds(controller.signal),
+        ])
+        if (controller.signal.aborted) return
+        setResult(devices)
+        setOnlineDeviceIds(new Set(onlineIds))
       } catch (err) {
         // Leaving the page aborts the request; that isn't an error to show.
         if (controller.signal.aborted) return
@@ -32,8 +41,10 @@ export default function HomePage() {
   if (!currentDevice) return <p>This device is not in its group's device list.</p>
   const peers = result.devices.filter((device) => device.id !== result.currentDeviceId)
 
-  // Presence tracking doesn't exist yet, so no other device is known to be online.
-  const onlineDeviceIds = new Set<string>()
-
-  return <DeviceGraph currentDevice={currentDevice} peers={peers} onlineDeviceIds={onlineDeviceIds} />
+  return (
+    <>
+      <DeviceGraph currentDevice={currentDevice} peers={peers} onlineDeviceIds={onlineDeviceIds} />
+      <TransferQueue />
+    </>
+  );
 }

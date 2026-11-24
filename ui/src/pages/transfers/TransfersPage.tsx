@@ -1,3 +1,6 @@
+import RecentTransfers from './RecentTransfers'
+
+// Give the Home history link a complete list of completed transfers to open.
 export default function TransfersPage() {
-  return <p>Transfers</p>
+  return <RecentTransfers preview={false} />
 }

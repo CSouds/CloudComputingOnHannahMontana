@@ -14,6 +14,9 @@ export const defaultTheme: Theme = {
     bright: '#5cc8ff',
     brightest: '#9fe2ff',
   },
+  status: {
+    success: '#8ee6ab',
+  },
   graph: {
     wire: '#8a939f',
     wireLive: '#3f8ef7',
