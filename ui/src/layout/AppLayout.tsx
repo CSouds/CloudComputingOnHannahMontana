@@ -1,4 +1,4 @@
-import { MonitorSmartphone, UserRound } from 'lucide-react'
+import { ArrowLeftRight, UserRound } from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router'
 import { useSyncExternalStore } from 'react'
 import { getActiveTransfer, subscribeActiveTransfer } from '../services/transfers'
@@ -17,7 +17,7 @@ export default function AppLayout() {
       <aside className="sidebar">
         {/* Same height as the top bar, so the app name sits level with the page title. */}
         <div className="sidebar-brand">
-          <MonitorSmartphone className="sidebar-brand-icon" size={22} aria-hidden="true" />
+          <ArrowLeftRight className="sidebar-brand-icon" size={22} aria-hidden="true" />
           Cross-Device
         </div>
         <nav className="sidebar-nav">
